@@ -11,11 +11,21 @@ impl Pallet {
     }
   }
 
-  pub fn set_balance(&mut self, account: &String, amount: u128) {
-    self.balances.insert(account.clone(), amount);
+  pub fn set_balance(&mut self, account: &str, amount: u128) {
+    self.balances.insert(account.to_string(), amount);
   }
 
-  pub fn get_balance(&self, account: &String) -> u128 {
+  pub fn get_balance(&self, account: &str) -> u128 {
     *self.balances.get(account).unwrap_or(&0)
   }
+}
+
+#[test]
+fn init_balances() {
+  let mut balances = Pallet::new();
+
+  assert_eq!(balances.get_balance(&"alice"), 0);
+  balances.set_balance(&"alice", 100);
+  assert_eq!(balances.get_balance(&"alice"), 100);
+  assert_eq!(balances.get_balance(&"bob"), 0);
 }
